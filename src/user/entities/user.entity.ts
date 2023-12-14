@@ -1,29 +1,43 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Membership } from './membership';
-import { Purchase } from './purchase';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Timestamp,
+} from 'typeorm';
+import { Membership } from './membership.entity';
+import { Purchase } from './purchase.entity';
 
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id: number;
+  readonly id: number;
 
-  @Column()
+  @Column('varchar', { length: 30 })
   name: string;
 
-  @Column()
+  @Column('varchar', { length: 30 })
   firstname: string;
 
-  @Column()
+  @Column('varchar', { length: 100 })
   address: string;
 
-  @Column()
+  @Column('varchar', { length: 20 })
   postalcode: string;
 
-  @Column()
+  @Column('varchar', { length: 50 })
   email: string;
 
-  @Column()
+  @Column('boolean', { default: true })
   is_valid: boolean;
+
+  @CreateDateColumn()
+  readonly created_date?: Timestamp;
+
+  @UpdateDateColumn()
+  readonly updated_date?: Timestamp;
 
   @OneToMany(() => Membership, (membership) => membership.user)
   memberships: Membership[];

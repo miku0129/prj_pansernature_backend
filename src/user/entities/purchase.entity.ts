@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  CreateDateColumn,
+  Timestamp,
+} from 'typeorm';
 import { User } from './user.entity';
 // import { Item } from 'src/item/entities/item.entity';
 
@@ -7,10 +14,10 @@ export class Purchase {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  purchased_date: Date;
+  @CreateDateColumn()
+  readonly purchased_date?: Timestamp;
 
-  @Column()
+  @Column('boolean', { default: false })
   is_ebook: boolean;
 
   @ManyToOne(() => User, (user) => user.purchases)
