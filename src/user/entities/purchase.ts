@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
-import { Item } from 'src/item/entities/item.entity';
+// import { Item } from 'src/item/entities/item.entity';
 
 @Entity()
 export class Purchase {
@@ -16,6 +16,6 @@ export class Purchase {
   @ManyToOne(() => User, (user) => user.purchases)
   user: User;
 
-  @ManyToOne(() => Item, (item) => item.purchases)
-  item: Item;
+  // @ManyToOne(() => Item, (item) => item.purchases)
+  // item: Item;
 }
