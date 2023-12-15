@@ -15,7 +15,7 @@ export class Item {
   readonly id: number;
 
   @Column('varchar', { length: 50 })
-  tite: string;
+  title: string;
 
   @Column('varchar', { length: 500, nullable: true })
   detail: string;
