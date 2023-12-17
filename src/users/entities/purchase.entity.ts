@@ -1,5 +1,4 @@
 import {
-  Column,
   Entity,
   PrimaryGeneratedColumn,
   ManyToOne,
@@ -16,9 +15,6 @@ export class Purchase {
 
   @CreateDateColumn()
   readonly purchased_date?: Timestamp;
-
-  @Column('boolean', { default: false })
-  is_ebook: boolean;
 
   @ManyToOne(() => User, (user) => user.purchases)
   user: User;

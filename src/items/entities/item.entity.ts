@@ -23,8 +23,11 @@ export class Item {
   @Column('int')
   price: number;
 
-  @Column('varchar', { length: 100 })
+  @Column('varchar', { length: 100, nullable: true })
   image_url: string;
+
+  @Column('boolean')
+  is_ebook: boolean;
 
   @CreateDateColumn()
   readonly created_date?: Timestamp;
