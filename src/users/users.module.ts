@@ -8,6 +8,7 @@ import typeorm from '../config/typeorm';
 import { User } from './entities/user.entity';
 import { Membership } from './entities/membership.entity';
 import { Purchase } from './entities/purchase.entity';
+import { Item } from 'src/items/entities/item.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { Purchase } from './entities/purchase.entity';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
-    TypeOrmModule.forFeature([User, Membership, Purchase]),
+    TypeOrmModule.forFeature([User, Membership, Purchase, Item]),
   ],
   controllers: [UsersController],
   providers: [UsersService],
