@@ -120,4 +120,33 @@ describe('ItemsService', () => {
       });
     });
   });
+
+  describe('update', () => {
+    it('should update a item', async () => {
+      const item1 = await service.create({
+        title: 'sample ebook1',
+        detail: 'this is sample ebook1',
+        price: 30,
+        image_url: 'url-of-image',
+        is_ebook: true,
+      });
+
+      const updatedinfo = {
+        ...item1,
+        price: 40,
+      };
+      const updatedItem1 = await service.update(item1.id, updatedinfo);
+
+      expect(updatedItem1).toEqual({
+        id: expect.any(Number),
+        title: 'sample ebook1',
+        detail: 'this is sample ebook1',
+        price: 40,
+        image_url: 'url-of-image',
+        is_ebook: true,
+        created_date: expect.any(Date),
+        updated_date: expect.any(Date),
+      });
+    });
+  });
 });

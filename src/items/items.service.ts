@@ -31,9 +31,13 @@ export class ItemsService {
       throw err;
     }
   }
-  
-  update(id: number, updateItemDto: UpdateItemDto) {
-    return `This action updates a #${id} item`;
+
+  async update(id: number, updateItemDto: UpdateItemDto): Promise<Item> {
+    let item = await this.itemRepository.findOneOrFail({
+      where: { id: id },
+    });
+    item = { ...item, ...updateItemDto };
+    return this.itemRepository.save(item);
   }
 
   remove(id: number) {
