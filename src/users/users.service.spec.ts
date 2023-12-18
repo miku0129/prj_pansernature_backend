@@ -21,6 +21,9 @@ describe('UsersService', () => {
       return Promise.resolve(newUser);
     }),
     find: jest.fn().mockImplementation(() => users),
+    findOneOrFail: jest.fn().mockImplementation(({ where: { id: id } }) => {
+      return users.find((item) => item.id === id);
+    }),
   };
 
   beforeEach(async () => {
@@ -42,7 +45,7 @@ describe('UsersService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('create user', () => {
+  describe('create', () => {
     it('should create a new user record and return that', async () => {
       const newUser = await service.create({
         name: 'Cat',
@@ -65,23 +68,54 @@ describe('UsersService', () => {
     });
   });
 
-  describe('get all users', () => {
+  describe('findAll', () => {
     it('should return all users', async () => {
       await service.create({
-        name: 'Cat',
-        firstname: 'Cool',
-        address: '003 CAMBRIDGE CATRIN',
-        postalcode: '30000',
-        email: 'catcool@sample.email',
+        name: 'test1',
+        firstname: 'TEST1',
+        address: '001 TEST TEST',
+        postalcode: '10000',
+        email: 'test1test1@sample.email',
       });
       await service.create({
-        name: 'Cat',
-        firstname: 'Cool',
-        address: '003 CAMBRIDGE CATRIN',
-        postalcode: '30000',
-        email: 'catcool@sample.email',
+        name: 'test2',
+        firstname: 'TEST2',
+        address: '002 TEST TEST',
+        postalcode: '20000',
+        email: 'test2test2@sample.email',
       });
       expect((await service.findAll()).length).toBe(2);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a user by id', async () => {
+      const user1 = await service.create({
+        name: 'test1',
+        firstname: 'TEST1',
+        address: '001 TEST TEST',
+        postalcode: '10000',
+        email: 'test1test1@sample.email',
+      });
+      const user2 = await service.create({
+        name: 'test2',
+        firstname: 'TEST2',
+        address: '002 TEST TEST',
+        postalcode: '20000',
+        email: 'test2test2@sample.email',
+      });
+      const foundUser = await service.findOne(user1.id);
+      expect(foundUser).toEqual({
+        id: expect.any(Number),
+        name: 'test1',
+        firstname: 'TEST1',
+        address: '001 TEST TEST',
+        postalcode: '10000',
+        email: 'test1test1@sample.email',
+        is_valid: true,
+        created_date: expect.any(Date),
+        updated_date: expect.any(Date),
+      });
     });
   });
 });

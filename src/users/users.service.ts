@@ -23,8 +23,16 @@ export class UsersService {
     });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number): Promise<User> {
+    try {
+      const user = await this.userRepository.findOneOrFail({
+        where: { id: id },
+        relations: ['memberships', 'purchases'],
+      });
+      return user;
+    } catch (err) {
+      throw err;
+    }
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
