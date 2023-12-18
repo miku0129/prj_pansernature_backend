@@ -7,8 +7,8 @@ import {
   UpdateDateColumn,
   Timestamp,
 } from 'typeorm';
-import { Membership } from './membership.entity';
-import { Purchase } from './purchase.entity';
+import { Membership } from 'src/memberships/entities/membership.entity';
+import { Purchase } from 'src/purchases/entities/purchase.entity';
 
 @Entity()
 export class User {

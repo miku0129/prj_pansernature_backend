@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ItemsService } from './items.service';
-import { ItemsController } from './items.controller';
+import { PurchasesService } from './purchases.service';
+import { PurchasesController } from './purchases.controller';
 
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeorm from '../config/typeorm';
-import { Item } from './entities/item.entity';
-import { Purchase } from 'src/purchases/entities/purchase.entity';
+import { Purchase } from './entities/purchase.entity';
+import { Item } from 'src/items/entities/item.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -19,9 +20,9 @@ import { Purchase } from 'src/purchases/entities/purchase.entity';
       useFactory: async (configService: ConfigService) =>
         configService.get('typeorm'),
     }),
-    TypeOrmModule.forFeature([Item, Purchase]),
+    TypeOrmModule.forFeature([Purchase, Item, User]),
   ],
-  controllers: [ItemsController],
-  providers: [ItemsService],
+  controllers: [PurchasesController],
+  providers: [PurchasesService],
 })
-export class ItemsModule {}
+export class PurchasesModule {}

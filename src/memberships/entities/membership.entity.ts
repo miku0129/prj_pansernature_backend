@@ -5,8 +5,9 @@ import {
   ManyToOne,
   CreateDateColumn,
   Timestamp,
+  JoinColumn,
 } from 'typeorm';
-import { User } from './user.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Membership {
@@ -19,9 +20,10 @@ export class Membership {
   @Column('date')
   end_date: Date;
 
-  @Column('boolean', { default: true })
+  @Column('boolean', { default: false })
   is_valid: boolean;
 
-  @ManyToOne(() => User, (user) => user.memberships)
+  @ManyToOne(() => User, (user) => user.memberships, { eager: true })
+  @JoinColumn()
   user: User;
 }

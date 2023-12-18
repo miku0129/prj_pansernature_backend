@@ -6,8 +6,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeorm from '../config/typeorm';
 import { User } from './entities/user.entity';
-import { Membership } from './entities/membership.entity';
-import { Purchase } from './entities/purchase.entity';
+import { Membership } from 'src/memberships/entities/membership.entity';
+import { Purchase } from 'src/purchases/entities/purchase.entity';
 import { Item } from 'src/items/entities/item.entity';
 
 @Module({
