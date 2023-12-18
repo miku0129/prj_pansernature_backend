@@ -17,14 +17,21 @@ export class ItemsService {
     return this.itemRepository.save(newItem);
   }
 
-  findAll() {
-    return `This action returns all items`;
+  findAll(): Promise<Item[]> {
+    return this.itemRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} item`;
+  async findOne(id: number): Promise<Item> {
+    try {
+      const item = await this.itemRepository.findOneOrFail({
+        where: { id: id },
+      });
+      return item;
+    } catch (err) {
+      throw err;
+    }
   }
-
+  
   update(id: number, updateItemDto: UpdateItemDto) {
     return `This action updates a #${id} item`;
   }

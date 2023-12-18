@@ -19,6 +19,15 @@ describe('ItemsService', () => {
       items.push(newItem);
       return Promise.resolve(newItem);
     }),
+    find: jest.fn().mockImplementation(() => items),
+    findOneOrFail: jest.fn().mockImplementation(({ where: { id: id } }) => {
+      return items.find((item) => item.id === id);
+    }),
+    remove: jest.fn().mockImplementation((id) => {
+      const item = items.find((item) => item.id === id);
+      items = items.filter((user) => user.id !== id);
+      return item;
+    }),
   };
 
   beforeEach(async () => {
@@ -47,12 +56,62 @@ describe('ItemsService', () => {
         detail: 'this is sample ebook',
         price: 30,
         image_url: 'url-of-image',
-        is_ebook: true
+        is_ebook: true,
       });
       expect(newItem).toEqual({
         id: expect.any(Number),
         title: 'sample ebook',
         detail: 'this is sample ebook',
+        price: 30,
+        image_url: 'url-of-image',
+        is_ebook: true,
+        created_date: expect.any(Date),
+        updated_date: expect.any(Date),
+      });
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all items', async () => {
+      await service.create({
+        title: 'sample ebook',
+        detail: 'this is sample ebook',
+        price: 30,
+        image_url: 'url-of-image',
+        is_ebook: true,
+      });
+      await service.create({
+        title: 'sample ebook2',
+        detail: 'this is sample ebook2',
+        price: 30,
+        image_url: 'url-of-image',
+        is_ebook: true,
+      });
+      expect((await service.findAll()).length).toBe(2);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a item by id', async () => {
+      const item1 = await service.create({
+        title: 'sample ebook1',
+        detail: 'this is sample ebook1',
+        price: 30,
+        image_url: 'url-of-image',
+        is_ebook: true,
+      });
+      const item2 = await service.create({
+        title: 'sample ebook1',
+        detail: 'this is sample ebook1',
+        price: 30,
+        image_url: 'url-of-image',
+        is_ebook: true,
+      });
+      const foundItem = await service.findOne(item1.id);
+      expect(foundItem).toEqual({
+        id: expect.any(Number),
+        title: 'sample ebook1',
+        detail: 'this is sample ebook1',
         price: 30,
         image_url: 'url-of-image',
         is_ebook: true,
