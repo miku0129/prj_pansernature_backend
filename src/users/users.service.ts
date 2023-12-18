@@ -35,11 +35,20 @@ export class UsersService {
     }
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    let user = await this.userRepository.findOneOrFail({
+      where: { id: id },
+      relations: ['memberships', 'purchases'],
+    });
+    user = { ...user, ...updateUserDto };
+    return this.userRepository.save(user);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<User> {
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: id },
+    });
+    this.userRepository.remove(user);
+    return user;
   }
 }

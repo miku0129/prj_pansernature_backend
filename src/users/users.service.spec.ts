@@ -22,7 +22,12 @@ describe('UsersService', () => {
     }),
     find: jest.fn().mockImplementation(() => users),
     findOneOrFail: jest.fn().mockImplementation(({ where: { id: id } }) => {
-      return users.find((item) => item.id === id);
+      return users.find((user) => user.id === id);
+    }),
+    remove: jest.fn().mockImplementation((id) => {
+      const user = users.find((user) => user.id === id);
+      users = users.filter((user) => user.id !== id);
+      return user;
     }),
   };
 
@@ -116,6 +121,48 @@ describe('UsersService', () => {
         created_date: expect.any(Date),
         updated_date: expect.any(Date),
       });
+    });
+  });
+
+  describe('update', () => {
+    it('should update a user', async () => {
+      const user1 = await service.create({
+        name: 'test1',
+        firstname: 'TEST1',
+        address: '001 TEST TEST',
+        postalcode: '10000',
+        email: 'test1test1@sample.email',
+      });
+      const updatedInfo = {
+        ...user1,
+        postalcode: '20000',
+        address: '002 EXAMIN EXAMIN',
+      };
+      const updatedUser1 = await service.update(user1.id, updatedInfo);
+      expect(updatedUser1).toEqual({
+        id: expect.any(Number),
+        name: 'test1',
+        firstname: 'TEST1',
+        address: '002 EXAMIN EXAMIN',
+        postalcode: '20000',
+        email: 'test1test1@sample.email',
+        is_valid: true,
+        created_date: expect.any(Date),
+        updated_date: expect.any(Date),
+      });
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a user record and return that', async () => {
+      const user1 = await service.create({
+        name: 'test1',
+        firstname: 'TEST1',
+        address: '001 TEST TEST',
+        postalcode: '10000',
+        email: 'test1test1@sample.email',
+      });
+      expect(await service.remove(user1.id)).toEqual(user1);
     });
   });
 });
