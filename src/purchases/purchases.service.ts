@@ -17,19 +17,30 @@ export class PurchasesService {
     return this.purchaseRepository.save(newPurchase);
   }
 
-  findAll() {
-    return `This action returns all purchases`;
+  findAll(): Promise<Purchase[]> {
+    return this.purchaseRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} purchase`;
+  async findOne(id: number) {
+    try {
+      const purchase = await this.purchaseRepository.findOneOrFail({
+        where: { id: id },
+      });
+      return purchase;
+    } catch (err) {
+      throw err;
+    }
   }
 
-  update(id: number, updatePurchaseDto: UpdatePurchaseDto) {
-    return `This action updates a #${id} purchase`;
-  }
+  // update(id: number, updatePurchaseDto: UpdatePurchaseDto) {
+  //   return `This action updates a #${id} purchase`;
+  // }
 
-  remove(id: number) {
-    return `This action removes a #${id} purchase`;
+  async remove(id: number): Promise<Purchase> {
+    const purchase = await this.purchaseRepository.findOneOrFail({
+      where: { id: id },
+    });
+    this.purchaseRepository.remove(purchase);
+    return purchase;
   }
 }

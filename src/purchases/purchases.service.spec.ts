@@ -18,6 +18,15 @@ describe('PurchasesService', () => {
       purchases.push(newPurchase);
       return Promise.resolve(newPurchase);
     }),
+    find: jest.fn().mockImplementation(() => purchases),
+    findOneOrFail: jest.fn().mockImplementation(({ where: { id: id } }) => {
+      return purchases.find((purchase) => purchase.id === id);
+    }),
+    remove: jest.fn().mockImplementation((id) => {
+      const purchase = purchases.find((purchase) => purchase.id === id);
+      purchases = purchases.filter((user) => user.id !== id);
+      return purchase;
+    }),
   };
 
   beforeEach(async () => {
@@ -39,13 +48,42 @@ describe('PurchasesService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('create purchase', () => {
+  describe('create', () => {
     it('should create a new purchase record and return that', async () => {
       const newPurchase = await service.create({});
       expect(newPurchase).toEqual({
         id: expect.any(Number),
         purchased_date: expect.any(Date),
       });
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all purchases', async () => {
+      await service.create({});
+      await service.create({});
+      expect((await service.findAll()).length).toBe(2);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a purchase by id', async () => {
+      const purchase1 = await service.create({});
+      const purchase2 = await service.create({});
+
+      const foundItem = await service.findOne(purchase1.id);
+      expect(foundItem).toEqual({
+        id: expect.any(Number),
+        purchased_date: expect.any(Date),
+      });
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a purchase', async () => {
+      const purchase = await service.create({});
+
+      expect(await service.remove(purchase.id)).toEqual(purchase);
     });
   });
 });

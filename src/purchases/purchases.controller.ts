@@ -22,10 +22,10 @@ export class PurchasesController {
     return this.purchasesService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePurchaseDto: UpdatePurchaseDto) {
-    return this.purchasesService.update(+id, updatePurchaseDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updatePurchaseDto: UpdatePurchaseDto) {
+  //   return this.purchasesService.update(+id, updatePurchaseDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
