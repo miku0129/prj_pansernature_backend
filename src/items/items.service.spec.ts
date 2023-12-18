@@ -149,4 +149,17 @@ describe('ItemsService', () => {
       });
     });
   });
+
+  describe('remove', () => {
+    it('should remove a record of item and return that', async () => {
+      const item1 = await service.create({
+        title: 'sample ebook1',
+        detail: 'this is sample ebook1',
+        price: 30,
+        image_url: 'url-of-image',
+        is_ebook: true,
+      });
+      expect(await service.remove(item1.id)).toEqual(item1);
+    });
+  });
 });
