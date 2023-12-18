@@ -17,12 +17,19 @@ export class MembershipsService {
     return this.membershipRepository.save(newMembership);
   }
 
-  findAll() {
-    return `This action returns all memberships`;
+  findAll(): Promise<Membership[]> {
+    return this.membershipRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} membership`;
+  async findOne(id: number): Promise<Membership> {
+    try {
+      const membership = await this.membershipRepository.findOneOrFail({
+        where: { id: id },
+      });
+      return membership;
+    } catch (err) {
+      throw err;
+    }
   }
 
   update(id: number, updateMembershipDto: UpdateMembershipDto) {

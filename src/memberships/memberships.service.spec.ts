@@ -19,6 +19,10 @@ describe('MembershipsService', () => {
       memberships.push(newMembership);
       return Promise.resolve(newMembership);
     }),
+    find: jest.fn().mockImplementation(() => memberships),
+    findOneOrFail: jest.fn().mockImplementation(({ where: { id: id } }) => {
+      return memberships.find((item) => item.id === id);
+    }),
   };
 
   beforeEach(async () => {
@@ -49,6 +53,36 @@ describe('MembershipsService', () => {
         id: expect.any(Number),
         created_date: expect.any(Date),
         end_date: expect.any(Date),
+        is_valid: false,
+      });
+    });
+  });
+
+  describe('findAll', () => {
+    it('should return all memberships', async () => {
+      await service.create({
+        end_date: new Date('2016-08-25T00:00:00'),
+      });
+      await service.create({
+        end_date: new Date('2016-08-25T00:00:00'),
+      });
+      expect((await service.findAll()).length).toBe(2);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a membership by id', async () => {
+      const membership1 = await service.create({
+        end_date: new Date('2016-08-25T00:00:00'),
+      });
+      const membership2 = await service.create({
+        end_date: new Date('2020-08-25T00:00:00'),
+      });
+      const foundItem = await service.findOne(membership1.id);
+      expect(foundItem).toEqual({
+        id: expect.any(Number),
+        created_date: expect.any(Date),
+        end_date: new Date('2016-08-25T00:00:00'),
         is_valid: false,
       });
     });
