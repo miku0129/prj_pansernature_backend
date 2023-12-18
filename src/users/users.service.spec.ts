@@ -20,6 +20,7 @@ describe('UsersService', () => {
       users.push(newUser);
       return Promise.resolve(newUser);
     }),
+    find: jest.fn().mockImplementation(() => users),
   };
 
   beforeEach(async () => {
@@ -61,6 +62,26 @@ describe('UsersService', () => {
         created_date: expect.any(Date),
         updated_date: expect.any(Date),
       });
+    });
+  });
+
+  describe('get all users', () => {
+    it('should return all users', async () => {
+      await service.create({
+        name: 'Cat',
+        firstname: 'Cool',
+        address: '003 CAMBRIDGE CATRIN',
+        postalcode: '30000',
+        email: 'catcool@sample.email',
+      });
+      await service.create({
+        name: 'Cat',
+        firstname: 'Cool',
+        address: '003 CAMBRIDGE CATRIN',
+        postalcode: '30000',
+        email: 'catcool@sample.email',
+      });
+      expect((await service.findAll()).length).toBe(2);
     });
   });
 });

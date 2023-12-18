@@ -1,11 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { CreatePurchaseDto } from './dto/create-purchase.dto';
 import { UpdatePurchaseDto } from './dto/update-purchase.dto';
+import { Purchase } from './entities/purchase.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PurchasesService {
-  create(createPurchaseDto: CreatePurchaseDto) {
-    return 'This action adds a new purchase';
+  constructor(
+    @InjectRepository(Purchase)
+    private purchaseRepository: Repository<Purchase>,
+  ) {}
+
+  create(createPurchaseDto: CreatePurchaseDto): Promise<Purchase> {
+    const newPurchase = this.purchaseRepository.create(createPurchaseDto);
+    return this.purchaseRepository.save(newPurchase);
   }
 
   findAll() {

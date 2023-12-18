@@ -11,7 +11,7 @@ describe('MembershipsService', () => {
     create: jest.fn().mockImplementation((dto) => dto),
     save: jest.fn().mockImplementation((membership) => {
       const newMembership = {
-        id: Date.now(),
+        id: 1,
         created_date: new Date('2016-08-25T00:00:00'),
         is_valid: false,
         ...membership,
