@@ -32,11 +32,22 @@ export class MembershipsService {
     }
   }
 
-  update(id: number, updateMembershipDto: UpdateMembershipDto) {
-    return `This action updates a #${id} membership`;
+  async update(
+    id: number,
+    updateMembershipDto: UpdateMembershipDto,
+  ): Promise<Membership> {
+    let membership = await this.membershipRepository.findOneOrFail({
+      where: { id: id },
+    });
+    membership = { ...membership, ...updateMembershipDto };
+    return this.membershipRepository.save(membership);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} membership`;
+  async remove(id: number): Promise<Membership> {
+    const membership = await this.membershipRepository.findOneOrFail({
+      where: { id: id },
+    });
+    this.membershipRepository.remove(membership);
+    return membership;
   }
 }
