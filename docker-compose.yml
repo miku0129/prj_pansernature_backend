@@ -1,0 +1,45 @@
+version: '3.5'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    hostname: postgres_db
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./db:/var/lib/postgresql/data
+    ports:
+      - '127.0.0.1:5432:5432'
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nest-docker-postgres
+    environment:
+      - DATABASE_HOST=postgres_db
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_DATABASE_NAME=postgres_db
+    ports:
+      - '127.0.0.1:3000:8080'
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   container_name: nest-pgadmin4
+  #   environment:
+  #     - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+  #     - PGADMIN_DEFAULT_PASSWORD=pgadmin4
+  #   ports:
+  #     - '5050:80'
+  #   depends_on:
+  #     - db
