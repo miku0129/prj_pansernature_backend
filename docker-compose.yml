@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   db:
-    image: postgres
+    image: postgres:14.1-alpine
     container_name: postgres-container
     hostname: ${DATABASE_HOST}
     restart: always
@@ -10,7 +10,7 @@ services:
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_USERNAME: ${DATABASE_USERNAME}
     volumes:
-      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
+      - ./data/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
       - ./db:/var/lib/postgresql/data
     ports:
       - '127.0.0.1:5432:5432'
@@ -32,6 +32,9 @@ services:
       - db
     volumes:
       - ./src:/app/src
+
+volumes:
+  db: 
 
   # pgadmin:
   #   image: dpage/pgadmin4
