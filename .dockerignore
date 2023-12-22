@@ -6,3 +6,4 @@ dist
 
 migrations_bk
 migrations
+.env
