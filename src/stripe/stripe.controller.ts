@@ -1,4 +1,4 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { StripeService } from './stripe.service';
 import Stripe from 'stripe';
 
@@ -21,9 +21,11 @@ export class StripeController {
   }
 
   @Post()
-  async createPaymentIntent(): Promise<CreatePaymentIntentResponse> {
+  async createPaymentIntent(
+    @Body('amount') amount: number,
+  ): Promise<CreatePaymentIntentResponse> {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: 1099,
+      amount: amount,
       currency: 'eur',
       payment_method_types: ['card', 'paypal'],
     });
