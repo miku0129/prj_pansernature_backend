@@ -79,6 +79,25 @@ describe('PurchasesService', () => {
     });
   });
 
+  describe('update', () => {
+    it('should update info of purchase', async () => {
+      const purchase = await service.create({
+        purchased_date: new Date('2016-08-25T00:00:00'),
+        is_valid: true,
+      });
+      const updatedinfo = {
+        ...purchase,
+        purchased_date: new Date('2020-08-25T00:00:00'),
+      };
+      const updatedPurchase = await service.update(purchase.id, updatedinfo);
+      expect(updatedPurchase).toEqual({
+        id: expect.any(Number),
+        purchased_date: expect.any(Date),
+        is_valid: true,
+      });
+    });
+  });
+
   describe('remove', () => {
     it('should remove a purchase', async () => {
       const purchase = await service.create({});

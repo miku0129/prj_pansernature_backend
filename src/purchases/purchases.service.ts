@@ -32,9 +32,16 @@ export class PurchasesService {
     }
   }
 
-  // update(id: number, updatePurchaseDto: UpdatePurchaseDto) {
-  //   return `This action updates a #${id} purchase`;
-  // }
+  async update(
+    id: number,
+    updatePurchaseDto: UpdatePurchaseDto,
+  ): Promise<Purchase> {
+    let purchase = await this.purchaseRepository.findOneOrFail({
+      where: { id: id },
+    });
+    purchase = { ...purchase, ...updatePurchaseDto };
+    return this.purchaseRepository.save(purchase);
+  }
 
   async remove(id: number): Promise<Purchase> {
     const purchase = await this.purchaseRepository.findOneOrFail({
