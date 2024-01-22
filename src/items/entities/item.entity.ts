@@ -29,7 +29,7 @@ export class Item {
   @Column('boolean')
   is_ebook: boolean;
 
-  @Column('int')
+  @Column('int', { nullable: true })
   weight?: number;
 
   @CreateDateColumn()

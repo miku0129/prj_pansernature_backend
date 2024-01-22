@@ -18,10 +18,10 @@ export class Purchase {
   @CreateDateColumn()
   readonly purchased_date?: Timestamp;
 
-  @Column('varchar', { length: 100 })
+  @Column('varchar', { length: 100, nullable: true })
   delivery_address?: string;
 
-  @Column('varchar', { length: 20 })
+  @Column('varchar', { length: 20, nullable: true })
   delivery_postalcode?: string;
 
   @Column('boolean', { default: true })
