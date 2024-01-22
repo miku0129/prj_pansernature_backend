@@ -29,6 +29,9 @@ export class Item {
   @Column('boolean')
   is_ebook: boolean;
 
+  @Column('int')
+  weight?: number;
+
   @CreateDateColumn()
   readonly created_date?: Timestamp;
 
