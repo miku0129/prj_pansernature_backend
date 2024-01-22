@@ -6,7 +6,13 @@ describe('PurchasesController', () => {
   let controller: PurchasesController;
   let purchases = [];
 
-  const create_dto = {};
+  const create_dto = {
+    is_valid: true,
+  };
+  const update_dto = {
+    ...create_dto,
+    is_valid: false,
+  };
 
   interface Purchase {
     id: number;
@@ -31,6 +37,11 @@ describe('PurchasesController', () => {
     findOne: jest.fn().mockImplementation((id) => {
       return purchases.find((purchase) => purchase.id === id);
     }),
+    update: jest.fn().mockImplementation((id, update_dto) => {
+      const foundpurchase = purchases.find((purchase) => purchase.id === id);
+      return { ...foundpurchase, ...update_dto };
+    }),
+
     remove: jest.fn().mockImplementation((id) => {
       const purchase = purchases.find((purchase) => purchase.id === id);
       purchases = purchases.filter((purchase) => purchase.id !== id);
@@ -61,6 +72,7 @@ describe('PurchasesController', () => {
       expect(await controller.create(create_dto)).toEqual({
         id: expect.any(Number),
         purchased_date: expect.any(Date),
+        is_valid: true,
       });
     });
   });
@@ -82,6 +94,17 @@ describe('PurchasesController', () => {
 
       const result = await controller.findOne(String(purchase.id));
       expect(result.id).toEqual(purchase.id);
+    });
+  });
+
+  describe('update', () => {
+    it('should updat info of purcase by id', async () => {
+      const purchase = await controller.create(create_dto);
+      const updated_purchase = await controller.update(
+        String(purchase.id),
+        update_dto,
+      );
+      expect(updated_purchase.is_valid).toBe(false);
     });
   });
 
