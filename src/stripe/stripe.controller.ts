@@ -22,14 +22,16 @@ export class StripeController {
 
   @Post()
   async createPaymentIntent(
-    @Body('amount') amount: number,
+    @Body('amount') amount: number | undefined,
   ): Promise<CreatePaymentIntentResponse> {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
-      currency: 'eur',
-      payment_method_types: ['card', 'paypal'],
-    });
+    if (amount) {
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: 'eur',
+        payment_method_types: ['card', 'paypal'],
+      });
 
-    return { client_secret: paymentIntent.client_secret };
+      return { client_secret: paymentIntent.client_secret };
+    }
   }
 }
